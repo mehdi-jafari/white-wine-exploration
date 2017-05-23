@@ -1,0 +1,4 @@
+"X"                    "fixed.acidity"        "volatile.acidity"     "citric.acid"         
+ [5] "residual.sugar"       "chlorides"            "free.sulfur.dioxide"  "total.sulfur.dioxide"
+ [9] "density"              "pH"                   "sulphates"            "alcohol"             
+[13] "quality"             

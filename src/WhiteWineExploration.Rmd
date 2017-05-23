@@ -1,0 +1,69 @@
+Red Wine Quality Analysis by Mehdi Jafari 
+======================================================== 
+ 
+```{r echo=FALSE, message=FALSE, warning=FALSE, packages} 
+library(ggplot2)  
+library(gridExtra)  
+library(knitr) 
+library(dplyr) 
+library(RColorBrewer)
+library(reshape2) 
+library(GGally) 
+
+``` 
+ 
+```{r echo=FALSE, message=FALSE, warning=FALSE} 
+# Load the Data 
+white_wine <- read.csv('wineQualityWhites.csv') 
+``` 
+ 
+This data set contains 4898 white wines with 11 variables on the chemical 
+properties of the wine. At least 3 wine experts rated the quality of each wine,  
+providing a rating between 0 (very bad) and 10 (very excellent). 
+ 
+# Univariate Plots Section 
+ 
+Our dataset consists of threen variables with 4898 observations. here is the  
+list of all the variables. 
+ 
+```{r echo=FALSE, message=FALSE, warning=FALSE} 
+# exploring the variables 
+str(white_wine) 
+
+names(white_wine) 
+``` 
+ 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE} 
+
+summary(white_wine) 
+``` 
+ 
+###All Variables distribution   
+ 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=30, fig.width=9} 
+
+plot_list <- list();
+counter <- 1
+
+for(col_name in colnames(white_wine)){
+  
+  if(col_name != 'X')
+  {
+    plot_list[[p]] <- ggplot( aes_string( x = col_name), data = white_wine) + 
+      geom_histogram(col="red", fill="green")
+    counter <- counter + 1
+    
+    plot_list[[counter]] <- ggplot( aes_string( x = col_name, y = col_name), data = white_wine) +
+      geom_boxplot(outlier.colour="red", outlier.size=4)
+    counter <- counter + 1
+  }
+}
+
+grid.arrange(grobs = plot_list, ncol=2) 
+
+
+ 
+``` 
+ 
