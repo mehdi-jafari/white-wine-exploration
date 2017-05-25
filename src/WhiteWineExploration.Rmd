@@ -1,4 +1,4 @@
-Red Wine Quality Analysis by Mehdi Jafari 
+White Wine Quality Analysis by Mehdi Jafari 
 ======================================================== 
  
 ```{r echo=FALSE, message=FALSE, warning=FALSE, packages} 
@@ -23,24 +23,35 @@ providing a rating between 0 (very bad) and 10 (very excellent).
  
 # Univariate Plots Section 
  
-Our dataset consists of threen variables with 4898 observations. here is the  
+Our dataset consists of eleven variables with 4898 observations. here is the  
 list of all the variables. 
  
 ```{r echo=FALSE, message=FALSE, warning=FALSE} 
 # exploring the variables 
-str(white_wine) 
 
-names(white_wine) 
+str(white_wine)
+
 ``` 
- 
+
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE} 
+#dataset summary
 
 summary(white_wine) 
+
 ``` 
+
  
+
 ###All Variables distribution   
  
+
+Based on the following histograms, all variables have normal distribution except
+Residual sugar which is right skewed distrbituoin. In the dataset all white 
+wins' quality varies between 3 to 9 with most of them have quality 6. In 
+addition almost all variables have outliers (outliers are flagged with red in 
+box plot) except alcohol.
+
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=30, fig.width=9} 
 
@@ -51,11 +62,13 @@ for(col_name in colnames(white_wine)){
   
   if(col_name != 'X')
   {
-    plot_list[[p]] <- ggplot( aes_string( x = col_name), data = white_wine) + 
+    plot_list[[counter]] <- ggplot( aes_string( x = col_name), data = 
+                                      white_wine) + 
       geom_histogram(col="red", fill="green")
     counter <- counter + 1
     
-    plot_list[[counter]] <- ggplot( aes_string( x = col_name, y = col_name), data = white_wine) +
+    plot_list[[counter]] <- ggplot( aes_string( x = col_name, y = col_name), 
+                                    data = white_wine) +
       geom_boxplot(outlier.colour="red", outlier.size=4)
     counter <- counter + 1
   }
@@ -66,4 +79,178 @@ grid.arrange(grobs = plot_list, ncol=2)
 
  
 ``` 
+
+# Univariate Analysis
+
+### What is the structure of your dataset? 
+
+our dataset contains 11 variables that you can find their short description in 
+the follwoing :
+
++ **fixed acidity**: most acids involved with wine or fixed or nonvolatile (do 
+not evaporate readily)
+
++ **volatile acidity**: the amount of acetic acid in wine, which at too high of
+levels can lead to an unpleasant, vinegar taste
+
++ **citric acid**: found in small quantities, citric acid can add 'freshness' 
+and flavor to wines
+
++ **residual sugar**: the amount of sugar remaining after fermentation stops, 
+it's rare to find wines with less than 1 gram/liter and wines with greater than
+45 grams/liter are considered sweet
+
++ **chlorides**: the amount of salt in the wine
+
++ **free sulfur dioxide**: the free form of SO2 exists in equilibrium between 
+molecular SO2 (as a dissolved gas) and bisulfite ion; it prevents microbial 
+growth and the oxidation of wine
+
++ **total sulfur dioxide**: amount of free and bound forms of S02; in low 
+concentrations, SO2 is mostly undetectable in wine, but at free SO2 
+concentrations over 50 ppm, SO2 becomes evident in the nose and taste of wine
+
++ **density**: the density of water is close to that of water depending on the 
+percent alcohol and sugar content
+
++ **pH**: describes how acidic or basic a wine is on a scale from 0 (very 
+acidic) to 14 (very basic); most wines are between 3-4 on the pH scale
+
++ **sulphates**: a wine additive which can contribute to sulfur dioxide gas 
+(S02) levels, wich acts as an antimicrobial and antioxidant
+
++ **alcohol**: the percent alcohol content of the wine
+
+
+### What is/are the main feature(s) of interest in your dataset? 
+
+The main feature in our dataset is quality. In this report will try to find 
+a corelation between other variables and quality.
+
+### What other features in the dataset do you think will help support your \ 
+investigation into your feature(s) of interest? 
+
+residual sugar, volatile acidity, density and alcohol could have corelation with
+quality of wine.
+
+### Did you create any new variables from existing variables in the dataset? 
+In order to have a better diagram, quality is categorized into four factors(
+bad(0-4), average(4-6), good(7-8) and excellent(9-10))
+   
+```{r  echo=FALSE, message=FALSE, warning=FALSE}
+
+white_wine$quality.bucket <- cut(white_wine$quality,  
+
+                       breaks = c(0, 4, 6, 8, 10),  
+
+                       labels = c('bad','average','good','excelent')) 
+
+```
+### Of the features you investigated, were there any unusual distributions? \ 
+
+Did you perform any operations on the data to tidy, adjust, or change the form \ 
+
+of the data? If so, why did you do this? 
+
+As it is mentioned earlier residual.sugar has right skewed distribution then a
+log10 transformation is applied to this variabale. the follwoing is the plot of 
+
+```{r  echo=FALSE, message=FALSE, warning=FALSE}
+
+p1 <- ggplot( aes( x = residual.sugar), data = white_wine) + 
+  geom_histogram() 
  
+p2 <- ggplot( aes( x = residual.sugar), data = white_wine ,  log10="x") + 
+  geom_histogram()
+
+grid.arrange(p1,p2 ,ncol = 2)
+
+```
+
+# Bivariate Plots Section
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=15, fig.width=9} 
+
+ggpairs(white_wine[, 2:13], 
+        upper = list(continuous = wrap("cor", size = 3)))
+
+
+``` 
+```{r  echo=FALSE, message=FALSE, warning=FALSE}
+
+d_cor <- as.matrix(cor(white_wine[c(2, 3, 4,5,6,7,8,9,10,11,12)]))
+d_cor_melt <- arrange(melt(d_cor), -abs(value))
+
+dplyr::filter(d_cor_melt, value > .5) # .5 is arbitrary
+
+# If you don't want to download dplyr
+subset(d_cor_melt, value > .5 & value < 1)
+
+```
+
+As it is shown in the above mentioned result, the follwoing pairs has the most 
+corelation with each other:
+
++ density and residual.sugar
++ total.sulfur.dioxide and free.sulfur.dioxide
++ density and total.sulfur.dioxide
+
+since free.sulfur.dioxide is a subset of total.sulfur.dioxide, we will not 
+investigate those pairs.
+
+```{r  echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x = density, y = residual.sugar), 
+
+       data = white_wine) +  
+
+  scale_color_brewer(type = 'div', guide = guide_legend(title = 'color',  
+
+                            override.aes = list(alpha = 1, size = 2))) + 
+
+  geom_jitter(alpha = 0.5, size = 2) 
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(aes(x = density, y = total.sulfur.dioxide), 
+
+       data = white_wine) +  
+
+  scale_color_brewer(type = 'div', guide = guide_legend(title = 'color',  
+
+                            override.aes = list(alpha = 1, size = 2))) + 
+
+  geom_jitter(alpha = 0.5, size = 2)
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(aes(x = alcohol, y = quality), 
+
+       data = white_wine) +  
+
+  scale_color_brewer(type = 'div', guide = guide_legend(title = 'color',  
+
+                            override.aes = list(alpha = 1, size = 2))) + 
+
+  geom_jitter(alpha = 0.5, size = 2)
+
+```
+
+# Bivariate Analysis 
+
+### Talk about some of the relationships you observed in this part of the \ 
+
+investigation. How did the feature(s) of interest vary with other features in \ 
+
+the dataset? 
+
+ 
+
+### Did you observe any interesting relationships between the other features \ 
+
+(not the main feature(s) of interest)? 
+
+ 
+
+### What was the strongest relationship you found? 
