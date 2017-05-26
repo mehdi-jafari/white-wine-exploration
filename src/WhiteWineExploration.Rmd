@@ -189,8 +189,8 @@ subset(d_cor_melt, value > .5 & value < 1)
 
 ```
 
-As it is shown in the above mentioned result, the follwoing pairs has the most 
-corelation with each other:
+As it is shown in the above mentioned result, the follwoing pairs have the most 
+correlation with each other:
 
 + density and residual.sugar
 + total.sulfur.dioxide and free.sulfur.dioxide
@@ -210,6 +210,7 @@ ggplot(aes(x = density, y = residual.sugar),
 
   geom_jitter(alpha = 0.5, size = 2) 
 ```
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 ggplot(aes(x = density, y = total.sulfur.dioxide), 
@@ -223,6 +224,7 @@ ggplot(aes(x = density, y = total.sulfur.dioxide),
   geom_jitter(alpha = 0.5, size = 2)
 
 ```
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 ggplot(aes(x = alcohol, y = quality), 
@@ -237,6 +239,7 @@ ggplot(aes(x = alcohol, y = quality),
 
 ```
 
+
 # Bivariate Analysis 
 
 ### Talk about some of the relationships you observed in this part of the \ 
@@ -245,12 +248,92 @@ investigation. How did the feature(s) of interest vary with other features in \
 
 the dataset? 
 
+Based on the result we may say that alcohol has the most corelation with the 
+quality(0.4355747) and has the least corelation with citiric.acid(0.009209091).
+
  
 
 ### Did you observe any interesting relationships between the other features \ 
 
 (not the main feature(s) of interest)? 
 
+As it is represented in the two previous plots, the more residual.sugar and 
+total.sulfur.dioxide, the more density.
  
 
 ### What was the strongest relationship you found? 
+As it was mentioned the strongest relationship is between density and 
+residual.sugar which is 0.8389665
+
+# Multivariate Plots Section
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(aes(x = residual.sugar, y = volatile.acidity, color = quality.bucket),
+       data = white_wine) + 
+  scale_color_brewer(type = 'div', guide = guide_legend(title = 'color', 
+                            override.aes = list(alpha = 1, size = 2))) +
+  geom_jitter(alpha = 0.5, size = 2)
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(aes(x = density, y = alcohol, color = quality.bucket),
+       data = white_wine) + 
+  scale_color_brewer(type = 'div', guide = guide_legend(title = 'color', 
+                            override.aes = list(alpha = 1, size = 2))) +
+  geom_jitter(alpha = 0.5, size = 2)
+
+```
+```{r}
+
+ggplot(aes(x = residual.sugar, y = alcohol, color = quality.bucket),
+       data = white_wine) + 
+  scale_color_brewer(type = 'div', guide = guide_legend(title = 'color', 
+                            override.aes = list(alpha = 1, size = 2))) +
+  geom_jitter(alpha = 0.5, size = 2)
+
+```
+```{r}
+ggplot(aes(x = residual.sugar, y = density, color = quality.bucket),
+       data = white_wine) + 
+  scale_color_brewer(type = 'div', guide = guide_legend(title = 'color', 
+                            )) +
+  geom_jitter(alpha = 0.5)
+
+```
+
+# Multivariate Analysis
+
+### Relationships observed in investigation
+
+As it was represented in the plots we can see the good white wins have less than
+20mg of residual suger and less than 7.5 volatile acidity. Also,Good wines tend
+to have more alcohol and less density. 
+
+### Interesting or surprising interactions between features?
+
+As it was mentioned eariler, the combination of alcohol, density and alcohol 
+affects the quality of wine.
+
+
+# Final Plots and Summary
+
+### Plot One
+
+
+### Description One
+
+
+### Plot Two
+
+### Description Two
+
+
+### Plot Three
+
+### Description Three
+
+# Reflection
+
