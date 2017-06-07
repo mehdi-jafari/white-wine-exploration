@@ -9,7 +9,7 @@ library(dplyr)
 library(RColorBrewer)
 library(reshape2) 
 library(GGally) 
-
+library(corrplot)
 ``` 
  
 ```{r echo=FALSE, message=FALSE, warning=FALSE} 
@@ -88,39 +88,87 @@ our dataset contains 11 variables that you can find their short description in
 the follwoing :
 
 + **fixed acidity**: most acids involved with wine or fixed or nonvolatile (do 
-not evaporate readily)
+not evaporate readily). The distribution of fixed acidity is normal although
+there are some outliers. 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(white_wine$fixed.acidity)
+```
 
 + **volatile acidity**: the amount of acetic acid in wine, which at too high of
-levels can lead to an unpleasant, vinegar taste
+levels can lead to an unpleasant, vinegar taste. This variable seems to have 
+many outliers as the mean is 0.2782 and the maximum valu in the destribution is 
+1.1. 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(white_wine$volatile.acidity)
+```
 
 + **citric acid**: found in small quantities, citric acid can add 'freshness' 
 and flavor to wines
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(white_wine$citric.acid)
+```
 
 + **residual sugar**: the amount of sugar remaining after fermentation stops, 
 it's rare to find wines with less than 1 gram/liter and wines with greater than
 45 grams/liter are considered sweet
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(white_wine$residual.sugar)
+```
+
+
 + **chlorides**: the amount of salt in the wine
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(white_wine$chlorides)
+```
 
 + **free sulfur dioxide**: the free form of SO2 exists in equilibrium between 
 molecular SO2 (as a dissolved gas) and bisulfite ion; it prevents microbial 
 growth and the oxidation of wine
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(white_wine$free.sulfur.dioxide)
+```
+
 + **total sulfur dioxide**: amount of free and bound forms of S02; in low 
 concentrations, SO2 is mostly undetectable in wine, but at free SO2 
 concentrations over 50 ppm, SO2 becomes evident in the nose and taste of wine
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(white_wine$total.sulfur.dioxide)
+```
+
 + **density**: the density of water is close to that of water depending on the 
 percent alcohol and sugar content
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(white_wine$density)
+```
 
 + **pH**: describes how acidic or basic a wine is on a scale from 0 (very 
 acidic) to 14 (very basic); most wines are between 3-4 on the pH scale
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(white_wine$pH)
+```
+
 + **sulphates**: a wine additive which can contribute to sulfur dioxide gas 
 (S02) levels, wich acts as an antimicrobial and antioxidant
 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(white_wine$sulphates)
+```
+
 + **alcohol**: the percent alcohol content of the wine
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(white_wine$alcohol)
+```
 
 ### What is/are the main feature(s) of interest in your dataset? 
 
@@ -172,12 +220,8 @@ grid.arrange(p1,p2 ,ncol = 2)
 # Bivariate Plots Section
 
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=15, fig.width=9} 
-
-ggpairs(white_wine[, 2:13], 
-        upper = list(continuous = wrap("cor", size = 3)))
-
-
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=7, fig.width=9} 
+ggcorr(white_wine[, 2:13], label = TRUE, label_size = 3, hjust = 0.8)
 ``` 
 ```{r  echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -191,7 +235,7 @@ subset(d_cor_melt, value > .5 & value < 1)
 
 ```
 
-As it is shown in the above mentioned result, the follwoing pairs have the most 
+As it is shown in the above mentioned result, the followoing pairs have the most 
 correlation with each other:
 
 + density and residual.sugar
@@ -210,7 +254,7 @@ ggplot(aes(x = density, y = residual.sugar),
 
                             override.aes = list(alpha = 1, size = 2))) + 
 
-  geom_jitter(alpha = 0.5, size = 2) 
+  geom_jitter(alpha = 0.05, size = 2) 
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -223,21 +267,24 @@ ggplot(aes(x = density, y = total.sulfur.dioxide),
 
                             override.aes = list(alpha = 1, size = 2))) + 
 
-  geom_jitter(alpha = 0.5, size = 2)
+  geom_jitter(alpha = 0.1, size = 2)
 
 ```
+Since the alcohol has the greatest correlation with quality which is the main
+factor, plot the correlation of these two variable could be helpful.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
-ggplot(aes(x = alcohol, y = quality), 
-
-       data = white_wine) +  
-
-  scale_color_brewer(type = 'div', guide = guide_legend(title = 'color',  
-
-                            override.aes = list(alpha = 1, size = 2))) + 
-
-  geom_jitter(alpha = 0.5, size = 2)
+ggplot(aes(factor(quality), 
+            alcohol), 
+        data = white_wine) +
+  geom_jitter( alpha = .3)  +
+  geom_boxplot( alpha = .5,color = 'blue')+
+  stat_summary(fun.y = "mean", 
+               geom = "point", 
+               color = "red", 
+               shape = 8, 
+               size = 4)
 
 ```
 
@@ -275,7 +322,10 @@ ggplot(aes(x = residual.sugar, y = volatile.acidity, color = quality.bucket),
        data = white_wine) + 
   scale_color_brewer(type = 'div', guide = guide_legend(title = 'color', 
                             override.aes = list(alpha = 1, size = 2))) +
-  geom_jitter(alpha = 0.5, size = 2)
+  geom_jitter(alpha = 0.1, size = 1) +
+  geom_smooth(method = "lm", se = FALSE,size=1) +
+  xlim(0,25)
+
 
 ```
 
@@ -285,7 +335,9 @@ ggplot(aes(x = density, y = alcohol, color = quality.bucket),
        data = white_wine) + 
   scale_color_brewer(type = 'div', guide = guide_legend(title = 'color', 
                             override.aes = list(alpha = 1, size = 2))) +
-  geom_jitter(alpha = 0.5, size = 2)
+  geom_jitter(alpha = 0.1, size = 1) +
+  geom_smooth(method = "lm", se = FALSE,size=1) +
+  xlim(0.98,1.01)
 
 ```
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -294,7 +346,9 @@ ggplot(aes(x = residual.sugar, y = alcohol, color = quality.bucket),
        data = white_wine) + 
   scale_color_brewer(type = 'div', guide = guide_legend(title = 'color', 
                             override.aes = list(alpha = 1, size = 2))) +
-  geom_jitter(alpha = 0.5, size = 2)
+  geom_jitter(alpha = 0.1, size = 1) +
+  geom_smooth(method = "lm", se = FALSE,size=1) +
+  xlim(0,25)
 
 ```
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -302,7 +356,10 @@ ggplot(aes(x = residual.sugar, y = density, color = quality.bucket),
        data = white_wine) + 
   scale_color_brewer(type = 'div', guide = guide_legend(title = 'color', 
                             )) +
-  geom_jitter(alpha = 0.5)
+  geom_jitter(alpha = 0.1, size = 1) +
+  geom_smooth(method = "lm", se = FALSE,size=1) +
+  xlim(0, 25) +
+  ylim(0.98 , 1.01)
 
 ```
 
@@ -326,15 +383,20 @@ affects the quality of wine.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
-ggplot(aes(x = alcohol, y = quality), 
 
-       data = white_wine) +  
-
-  scale_color_brewer(type = 'div', guide = guide_legend(title = 'color',  
-
-                            override.aes = list(alpha = 1, size = 2))) + 
-
-  geom_jitter(alpha = 0.5, size = 2)
+ggplot(aes(factor(quality), 
+            alcohol), 
+        data = white_wine) +
+  geom_jitter( alpha = .3)  +
+  geom_boxplot( alpha = .5,color = 'blue')+
+  stat_summary(fun.y = "mean", 
+               geom = "point", 
+               color = "red", 
+               shape = 8, 
+               size = 4) +
+  xlab('Wine Quality') +
+  ylab('Alcohol Percentage') +
+  labs(title = 'Alcohol Percentage by Quality')
 
 ```
 
@@ -351,7 +413,12 @@ ggplot(aes(x = residual.sugar, y = alcohol, color = quality.bucket),
        data = white_wine) + 
   scale_color_brewer(type = 'div', guide = guide_legend(title = 'color', 
                             override.aes = list(alpha = 1, size = 2))) +
-  geom_jitter(alpha = 0.5, size = 2)
+  geom_jitter(alpha = 0.1, size = 1) +
+  geom_smooth(method = "lm", se = FALSE,size=1) +
+  xlim(0,25) +
+  xlab('Residual Suger') +
+  ylab('Alcohol Percentage') +
+  labs(title = 'Residual Suger and Alcohol Percentage by Quality Categories')
 
 ```
 
@@ -368,7 +435,12 @@ ggplot(aes(x = residual.sugar, y = volatile.acidity, color = quality.bucket),
        data = white_wine) + 
   scale_color_brewer(type = 'div', guide = guide_legend(title = 'color', 
                             override.aes = list(alpha = 1, size = 2))) +
-  geom_jitter(alpha = 0.5, size = 2)
+  geom_jitter(alpha = 0.1, size = 1) +
+  geom_smooth(method = "lm", se = FALSE,size=1) +
+  xlim(0,25) +
+  xlab('volatile acidity (acetic acid - g / dm^3)') +
+  ylab('Residual Suger') +
+  labs(title = 'Residual Suger and volatile acidity (acetic acid - g / dm^3) by Quality Categories')
 
 ```
 
