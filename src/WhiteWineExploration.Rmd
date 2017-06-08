@@ -27,7 +27,7 @@ Our dataset consists of eleven variables with 4898 observations. here is the
 list of all the variables. 
  
 ```{r echo=FALSE, message=FALSE, warning=FALSE} 
-# exploring the variables 
+# exploring the variables
 
 str(white_wine)
 
@@ -47,7 +47,7 @@ summary(white_wine)
  
 
 Based on the following histograms, all variables have normal distribution except
-Residual sugar which is right skewed distrbituoin. In the dataset all white 
+Residual sugar which is right skewed distribution. In the dataset all white 
 wins' quality varies between 3 to 9 with most of them have quality 6. In 
 addition almost all variables have outliers (outliers are flagged with red in 
 box plot) except alcohol.
@@ -62,14 +62,16 @@ for(col_name in colnames(white_wine)){
   
   if(col_name != 'X')
   {
-    plot_list[[counter]] <- ggplot( aes_string( x = col_name), data = 
-                                      white_wine) + 
+    plot_list[[counter]] <- ggplot( aes_string( x = col_name),
+                                    data = white_wine) +
       geom_histogram(col="red", fill="green")
+    
     counter <- counter + 1
     
-    plot_list[[counter]] <- ggplot( aes_string( x = col_name, y = col_name), 
+    plot_list[[counter]] <- ggplot( aes_string( x = col_name, y = col_name),
                                     data = white_wine) +
       geom_boxplot(outlier.colour="red", outlier.size=4)
+    
     counter <- counter + 1
   }
 }
@@ -85,7 +87,7 @@ grid.arrange(grobs = plot_list, ncol=2)
 ### What is the structure of your dataset? 
 
 our dataset contains 11 variables that you can find their short description in 
-the follwoing :
+the following:
 
 + **fixed acidity**: most acids involved with wine or fixed or nonvolatile (do 
 not evaporate readily). The distribution of fixed acidity is normal although
@@ -97,15 +99,16 @@ summary(white_wine$fixed.acidity)
 
 + **volatile acidity**: the amount of acetic acid in wine, which at too high of
 levels can lead to an unpleasant, vinegar taste. This variable seems to have 
-many outliers as the mean is 0.2782 and the maximum valu in the destribution is 
-1.1. 
+many outliers as the mean is 0.2782 and the maximum value in the distribution 
+is 1.1. 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 summary(white_wine$volatile.acidity)
 ```
 
 + **citric acid**: found in small quantities, citric acid can add 'freshness' 
-and flavor to wines
+and flavor to wines. As we can see 75 percent of observations have less than 
+0.3900 mg citric.acid while the max is 1.66 mg.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 summary(white_wine$citric.acid)
@@ -113,7 +116,8 @@ summary(white_wine$citric.acid)
 
 + **residual sugar**: the amount of sugar remaining after fermentation stops, 
 it's rare to find wines with less than 1 gram/liter and wines with greater than
-45 grams/liter are considered sweet
+45 grams/liter are considered sweet. Based on the definition, none of the 
+wines in our dataset is considered as sweet wine.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 summary(white_wine$residual.sugar)
@@ -143,7 +147,8 @@ summary(white_wine$total.sulfur.dioxide)
 ```
 
 + **density**: the density of water is close to that of water depending on the 
-percent alcohol and sugar content
+percent alcohol and sugar content. this variable has only 3 outliers in our
+dataset.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 summary(white_wine$density)
@@ -157,14 +162,15 @@ summary(white_wine$pH)
 ```
 
 + **sulphates**: a wine additive which can contribute to sulfur dioxide gas 
-(S02) levels, wich acts as an antimicrobial and antioxidant
+(S02) levels, which acts as an antimicrobial and antioxidant
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 summary(white_wine$sulphates)
 ```
 
-+ **alcohol**: the percent alcohol content of the wine
++ **alcohol**: the percent alcohol content of the wine. There is no outlier in 
+alcohol distribution.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 summary(white_wine$alcohol)
@@ -173,17 +179,18 @@ summary(white_wine$alcohol)
 ### What is/are the main feature(s) of interest in your dataset? 
 
 The main feature in our dataset is quality. In this report will try to find 
-a corelation between other variables and quality.
+a correlation  between other variables and quality.
 
 ### What other features in the dataset do you think will help support your \ 
 investigation into your feature(s) of interest? 
 
-residual sugar, volatile acidity, density and alcohol could have corelation with
-quality of wine.
+residual sugar, volatile acidity, density and alcohol could have correlation 
+with quality of wine.
 
 ### Did you create any new variables from existing variables in the dataset? 
-In order to have a better diagram, quality is categorized into four factors(
-bad(0-4), average(4-6), good(7-8) and excellent(9-10))
+In order to have a better diagram, quality is categorized into four factors
+ (bad (0-4), average (4-6), good (7-8) and excellent (9-10))
+
    
 ```{r  echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -201,7 +208,8 @@ Did you perform any operations on the data to tidy, adjust, or change the form \
 of the data? If so, why did you do this? 
 
 As it is mentioned earlier residual.sugar has right skewed distribution then a
-log10 transformation is applied to this variabale. the follwoing is the plot of 
+log10 transformation is applied to this variable. the plot is depicted in the 
+following:
 
 ```{r  echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -235,7 +243,7 @@ subset(d_cor_melt, value > .5 & value < 1)
 
 ```
 
-As it is shown in the above mentioned result, the followoing pairs have the most 
+As it is shown in the above mentioned result, the following pairs have the most 
 correlation with each other:
 
 + density and residual.sugar
@@ -297,9 +305,9 @@ investigation. How did the feature(s) of interest vary with other features in \
 
 the dataset? 
 
-Based on the result we may say that alcohol has the most corelation with the 
-quality(0.4355747) and has the least corelation with citiric.acid(0.009209091).
-
+Based on the result we may say that alcohol has the most correlation with the 
+quality (0.4355747) and has the least correlation with citiric.acid
+(0.009209091).
  
 
 ### Did you observe any interesting relationships between the other features \ 
@@ -367,13 +375,13 @@ ggplot(aes(x = residual.sugar, y = density, color = quality.bucket),
 
 ### Relationships observed in investigation
 
-As it was represented in the plots we can see the good white wins have less than
-20mg of residual suger and less than 7.5 volatile acidity. Also,Good wines tend
-to have more alcohol and less density. 
+As it was represented in the plots we can see the good white wins have less 
+than 20mg of residual.sugar and less than 7.5 volatile acidity. Also, Good 
+wines tend to have more alcohol and less density.
 
 ### Interesting or surprising interactions between features?
 
-As it was mentioned eariler, the combination of alcohol, density and alcohol 
+As it was mentioned earlier, the combination of alcohol, density and alcohol 
 affects the quality of wine.
 
 
@@ -423,9 +431,10 @@ ggplot(aes(x = residual.sugar, y = alcohol, color = quality.bucket),
 ```
 
 ### Description Two
-High quality wines have less than 20mg residual.suger. As it is presented in the
-diagram the less residual suger and the more alcohlle the more chance you have a
-better quality wine.
+High quality wines have less than 20mg residual.suger. As it is presented in 
+the diagram the less residual.suger and the more alcohol the more chance you 
+have a better quality wine.
+
 
 ### Plot Three
 
@@ -447,16 +456,21 @@ ggplot(aes(x = residual.sugar, y = volatile.acidity, color = quality.bucket),
 
 ### Description Three
 High quality wines have less than 8g volatile acidity. As it is presented in the
-diagram the less residual suger and the less volatile acidity the more chance 
+diagram the less residual.sugar and the less volatile acidity the more chance 
 you have a better quality wine.
+
 
 # Reflection
 
 
 In this project, I analyzed the effect of different variables of white wine on 
-its quality based on the data set that contained 4,898 observations with 11 
+its quality based on the dataset that contained 4,898 observations with 11 
 variables on the chemical properties. I categorized the quality of wine into 4 
-groups (bad, average, good, excellent). I found out that the strongest 
-correlation is between density and residual.suger also alcohol has the strongest
-correlation with quality. By exploring these variables, I found some correlation
-of them with good quality white wine.
+groups (bad, average, good, excellent). I found out that good wines tend to have
+more alcohol and less sugar.
+
+I can't expand my findings to the other white wine datasets since my sample is
+not a random dataset from all type of white wines, it's a sample of wines of a 
+specific region in Portuguese called Vinho Verde. And, there might be a 
+combination of several variables (more than two) would outcome to a perfect that
+wasn't investigated in this project.
