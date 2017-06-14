@@ -40,7 +40,7 @@ providing a rating between 0 (very bad) and 10 (very excellent).
  
 # Univariate Plots Section 
  
-Our dataset consists of eleven variables with 4898 observations. here is the  
+Our dataset consists of eleven variables with 4898 observations. Here is the  
 list of all the variables. 
  
 ```{r} 
@@ -60,8 +60,9 @@ summary(white_wine)
 
 ###Quality
 
-We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+We can see in the following diagram that the quality has a fairly normal 
+distribution.
+
 ```{r, fig.height=30, fig.width=9}
  # Summary of quality variable
 summary(white_wine$quality)
@@ -69,13 +70,15 @@ summary(white_wine$quality)
 
 ```{r}
 # exploring the quality distribution
-plot_box_histogram('quality')
+ggplot( aes_string( x = 'quality'), data = white_wine) +
+    geom_histogram(col="red", fill="green")
+    
 ``` 
 
 ###Fixed Acidity
 
-We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+The distribution of fixed acidity is normal, 50 percent of the 
+observations have between 6.300 to 7.300 g/dm^3 tartaric acid.
 
 ```{r, fig.height=30, fig.width=9}
  # Summary of fixed.acidity variable
@@ -90,8 +93,8 @@ plot_box_histogram('fixed.acidity')
 
 ###Volatile Acidity
 
-We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+The amount of acetic acid in wine, which at too high of levels can lead to an unpleasant, vinegar taste. This variable seems to have many outliers as the mean
+is 0.2782 and the maximum value in the distribution is 1.1.
 
 ```{r, fig.height=30, fig.width=9}
  # Summary of volatile.acidity variable
@@ -105,8 +108,9 @@ plot_box_histogram('volatile.acidity')
 
 ###Citric Acid
 
-We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+Citric Acid is found in small quantities, citric acid can add 'freshness' and
+flavor to wines. 75 percent of observations have less than 0.3900 g/dm^3 
+citric.acid while the max is 1.66 mg.
 
 ```{r, fig.height=30, fig.width=9}
  # Summary of citric.acid variable
@@ -120,8 +124,10 @@ plot_box_histogram('citric.acid')
 
 ###Residual Sugar
 
-We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+The amount of sugar remaining after fermentation stops, it's rare to find wines 
+with less than 1 gram/liter and wines with greater than 45 grams/liter are 
+considered sweet. Based on the definition, none of the wines in our dataset is considered as sweet wine. The distribution of residual sugar is right skewed. We
+will look into this variable later on.
 
 ```{r, fig.height=30, fig.width=9}
  # Summary of residual.sugar variable
@@ -135,8 +141,8 @@ plot_box_histogram('residual.sugar')
 
 ###Chlorides
 
-We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+Chlorides is the amount of salt in the wine. As it's depicted in the following 
+plot, it has right skewed distribution.
 
 ```{r, fig.height=30, fig.width=9}
  # Summary of chlorides variable
@@ -150,8 +156,8 @@ plot_box_histogram('chlorides')
 
 ###Free Sulfur Dioxide
 
-We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+The free form of SO2 exists in equilibrium between molecular SO2 (as a dissolved
+gas) and bisulfite ion; it prevents microbial growth and the oxidation of wine.
 
 ```{r, fig.height=30, fig.width=9}
  # Summary of free.sulfur.dioxide variable
@@ -166,7 +172,7 @@ plot_box_histogram('free.sulfur.dioxide')
 ###Total Sulfur Dioxide
 
 We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+and there are only three significant outliers.
 
 ```{r, fig.height=30, fig.width=9}
  # Summary of total.sulfur.dioxide variable
@@ -180,8 +186,8 @@ plot_box_histogram('total.sulfur.dioxide')
 
 ###Density
 
-We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+The density of water is close to that of water depending on the percent alcohol 
+and sugar content. This variable has only 3 outliers in our dataset.
 
 ```{r, fig.height=30, fig.width=9}
  # Summary of density variable
@@ -195,8 +201,8 @@ plot_box_histogram('density')
 
 ###PH
 
-We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+Describes how acidic or basic a wine is on a scale from 0 (very acidic) to 14 
+(very basic); most wines are between 3-4 on the pH scale.
 
 ```{r, fig.height=30, fig.width=9}
  # Summary of pH variable
@@ -210,8 +216,7 @@ plot_box_histogram('pH')
 
 ###Sulphates
 
-We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+A wine additive which can contribute to sulfur dioxide gas (S02) levels, which acts as an antimicrobial and antioxidant.
 
 ```{r, fig.height=30, fig.width=9}
  # Summary of sulphates variable
@@ -225,8 +230,8 @@ plot_box_histogram('sulphates')
 
 ###Alcohol
 
-We can see in the following diagram that the quality has a normal distribution 
-and there are only three signifcant outliers.
+The percent alcohol content of the wine. There is no outlier in alcohol 
+distribution.
 
 ```{r, fig.height=30, fig.width=9}
  # Summary of alcohol variable
@@ -242,103 +247,16 @@ plot_box_histogram('alcohol')
 
 ### What is the structure of your dataset? 
 
-our dataset contains 11 variables that you can find their short description in 
-the following:
-
-+ **fixed acidity**: most acids involved with wine or fixed or nonvolatile (do 
-not evaporate readily). The distribution of fixed acidity is normal although
-there are some outliers. 
-
-```{r}
-summary(white_wine$fixed.acidity)
-```
-
-+ **volatile acidity**: the amount of acetic acid in wine, which at too high of
-levels can lead to an unpleasant, vinegar taste. This variable seems to have 
-many outliers as the mean is 0.2782 and the maximum value in the distribution 
-is 1.1. 
-
-```{r}
-summary(white_wine$volatile.acidity)
-```
-
-+ **citric acid**: found in small quantities, citric acid can add 'freshness' 
-and flavor to wines. As we can see 75 percent of observations have less than 
-0.3900 mg citric.acid while the max is 1.66 mg.
-
-```{r}
-summary(white_wine$citric.acid)
-```
-
-+ **residual sugar**: the amount of sugar remaining after fermentation stops, 
-it's rare to find wines with less than 1 gram/liter and wines with greater than
-45 grams/liter are considered sweet. Based on the definition, none of the 
-wines in our dataset is considered as sweet wine.
-
-```{r}
-summary(white_wine$residual.sugar)
-```
-
-
-+ **chlorides**: the amount of salt in the wine
-
-```{r}
-summary(white_wine$chlorides)
-```
-
-+ **free sulfur dioxide**: the free form of SO2 exists in equilibrium between 
-molecular SO2 (as a dissolved gas) and bisulfite ion; it prevents microbial 
-growth and the oxidation of wine
-
-```{r}
-summary(white_wine$free.sulfur.dioxide)
-```
-
-+ **total sulfur dioxide**: amount of free and bound forms of S02; in low 
-concentrations, SO2 is mostly undetectable in wine, but at free SO2 
-concentrations over 50 ppm, SO2 becomes evident in the nose and taste of wine
-
-```{r}
-summary(white_wine$total.sulfur.dioxide)
-```
-
-+ **density**: the density of water is close to that of water depending on the 
-percent alcohol and sugar content. this variable has only 3 outliers in our
-dataset.
-
-```{r}
-summary(white_wine$density)
-```
-
-+ **pH**: describes how acidic or basic a wine is on a scale from 0 (very 
-acidic) to 14 (very basic); most wines are between 3-4 on the pH scale
-
-```{r}
-summary(white_wine$pH)
-```
-
-+ **sulphates**: a wine additive which can contribute to sulfur dioxide gas 
-(S02) levels, which acts as an antimicrobial and antioxidant
-
-
-```{r}
-summary(white_wine$sulphates)
-```
-
-+ **alcohol**: the percent alcohol content of the wine. There is no outlier in 
-alcohol distribution.
-
-```{r}
-summary(white_wine$alcohol)
-```
+The given dataset contains 11 variables (fixed acidity, volatile acidity, citric
+acid, residual sugar, chlorides, free sulfur dioxide, total sulfur dioxide, 
+density, pH, sulphates, alcohol and quality). All the variables are numerical.
 
 ### What is/are the main feature(s) of interest in your dataset? 
 
 The main feature in our dataset is quality. In this report will try to find 
 a correlation  between other variables and quality.
 
-### What other features in the dataset do you think will help support your \ 
-investigation into your feature(s) of interest? 
+### What other features in the dataset do you think will help support your \investigation into your feature(s) of interest? 
 
 residual sugar, volatile acidity, density and alcohol could have correlation 
 with quality of wine.
@@ -357,15 +275,11 @@ white_wine$quality.bucket <- cut(white_wine$quality,
                        labels = c('bad','average','good','excellent')) 
 
 ```
-### Of the features you investigated, were there any unusual distributions? \ 
+### Of the features you investigated, were there any unusual distributions?\Did you perform any operations on the data to tidy, adjust, or change the form\of the data? If so, why did you do this? 
 
-Did you perform any operations on the data to tidy, adjust, or change the form \ 
-
-of the data? If so, why did you do this? 
-
-As it is mentioned earlier residual.sugar has right skewed distribution then a
-log10 transformation is applied to this variable. the plot is depicted in the 
-following:
+As it is mentioned earlier residual.sugar and chlorides have right skewed 
+distribution then a log10 transformation is applied to these variables. the 
+plots are depicted in the following:
 
 ```{r }
 
@@ -373,6 +287,19 @@ p1 <- ggplot( aes( x = residual.sugar), data = white_wine) +
   geom_histogram() 
  
 p2 <- ggplot( aes( x = residual.sugar), data = white_wine ) + 
+  geom_histogram()+
+  scale_x_log10()
+
+
+grid.arrange(p1,p2 ,ncol = 2)
+
+```
+```{r }
+
+p1 <- ggplot( aes( x = chlorides), data = white_wine) + 
+  geom_histogram() 
+ 
+p2 <- ggplot( aes( x = chlorides), data = white_wine ) + 
   geom_histogram()+
   scale_x_log10()
 
@@ -581,7 +508,7 @@ ggplot(aes(x = residual.sugar, y = alcohol, color = quality.bucket),
   geom_jitter(alpha = 0.1, size = 1) +
   geom_smooth(method = "lm", se = FALSE,size=1) +
   xlim(0,25) +
-  xlab('Residual Suger') +
+  xlab('Residual Suger (g / dm^3)') +
   ylab('Alcohol Percentage') +
   labs(title = 'Residual Suger and Alcohol Percentage by Quality Categories')
 
@@ -604,9 +531,9 @@ ggplot(aes(x = residual.sugar, y = volatile.acidity, color = quality.bucket),
   geom_jitter(alpha = 0.1, size = 1) +
   geom_smooth(method = "lm", se = FALSE,size=1) +
   xlim(0,25) +
-  xlab('volatile acidity (acetic acid - g / dm^3)') +
-  ylab('Residual Suger') +
-  labs(title = 'Residual Suger and volatile acidity (acetic acid - g / dm^3) by Quality Categories')
+  ylab('volatile acidity (acetic acid - g / dm^3)') +
+  xlab('Residual Suger (g / dm^3)') +
+  labs(title = 'Residual Suger (g / dm^3) and volatile acidity (acetic acid - g / dm^3) by Quality')
 
 ```
 
