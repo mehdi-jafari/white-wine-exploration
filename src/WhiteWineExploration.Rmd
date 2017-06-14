@@ -14,10 +14,25 @@ library(corrplot)
 ``` 
  
 ```{r} 
+# define a function to plot histogram and boxplot
+ plot_box_histogram <- function(variableName){
+  p1 <- ggplot( aes_string( x = variableName), data = white_wine) +
+    geom_histogram(col="red", fill="green")
+    
+  p2 <- ggplot( aes_string( x = variableName, y = variableName),
+                                    data = white_wine) +
+      geom_boxplot(outlier.colour="red", outlier.size=4)
+  
+  grid.arrange(p1, p2, ncol=2) 
+}
+``` 
+
+```{r} 
 # Load the Data 
 white_wine <- read.csv('wineQualityWhites.csv') 
 white_wine$X <- NULL
 ``` 
+
  
 This data set contains 4898 white wines with 11 variables on the chemical 
 properties of the wine. At least 3 wine experts rated the quality of each wine,  
@@ -43,45 +58,184 @@ summary(white_wine)
 
 ``` 
 
- 
+###Quality
 
-###All Variables distribution   
- 
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
+```{r, fig.height=30, fig.width=9}
+ # Summary of quality variable
+summary(white_wine$quality)
+``` 
 
-Based on the following histograms, all variables have normal distribution except
-Residual sugar which is right skewed distribution. In the dataset all white 
-wins' quality varies between 3 to 9 with most of them have quality 6. In 
-addition almost all variables have outliers (outliers are flagged with red in 
-box plot) except alcohol.
+```{r}
+# exploring the quality distribution
+plot_box_histogram('quality')
+``` 
 
+###Fixed Acidity
 
-```{r, fig.height=30, fig.width=9} 
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
 
-plot_list <- list();
-counter <- 1
+```{r, fig.height=30, fig.width=9}
+ # Summary of fixed.acidity variable
+summary(white_wine$fixed.acidity)
+``` 
 
-for(col_name in colnames(white_wine)){
-  
-  if(col_name != 'X')
-  {
-    plot_list[[counter]] <- ggplot( aes_string( x = col_name),
-                                    data = white_wine) +
-      geom_histogram(col="red", fill="green")
-    
-    counter <- counter + 1
-    
-    plot_list[[counter]] <- ggplot( aes_string( x = col_name, y = col_name),
-                                    data = white_wine) +
-      geom_boxplot(outlier.colour="red", outlier.size=4)
-    
-    counter <- counter + 1
-  }
-}
-
-grid.arrange(grobs = plot_list, ncol=2) 
+```{r}
+ # exploring the fixed.acidity distribution
+plot_box_histogram('fixed.acidity')
+``` 
 
 
- 
+###Volatile Acidity
+
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
+
+```{r, fig.height=30, fig.width=9}
+ # Summary of volatile.acidity variable
+summary(white_wine$volatile.acidity)
+``` 
+
+```{r}
+ # exploring the volatile.acidity distribution
+plot_box_histogram('volatile.acidity')
+``` 
+
+###Citric Acid
+
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
+
+```{r, fig.height=30, fig.width=9}
+ # Summary of citric.acid variable
+summary(white_wine$citric.acid)
+``` 
+
+```{r}
+ # exploring the citric.acid distribution
+plot_box_histogram('citric.acid')
+``` 
+
+###Residual Sugar
+
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
+
+```{r, fig.height=30, fig.width=9}
+ # Summary of residual.sugar variable
+summary(white_wine$residual.sugar)
+``` 
+
+```{r}
+ # exploring the residual.sugar distribution
+plot_box_histogram('residual.sugar')
+``` 
+
+###Chlorides
+
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
+
+```{r, fig.height=30, fig.width=9}
+ # Summary of chlorides variable
+summary(white_wine$chlorides)
+``` 
+
+```{r}
+ # exploring the chlorides distribution
+plot_box_histogram('chlorides')
+``` 
+
+###Free Sulfur Dioxide
+
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
+
+```{r, fig.height=30, fig.width=9}
+ # Summary of free.sulfur.dioxide variable
+summary(white_wine$free.sulfur.dioxide)
+``` 
+
+```{r}
+ # exploring the free.sulfur.dioxide distribution
+plot_box_histogram('free.sulfur.dioxide')
+``` 
+
+###Total Sulfur Dioxide
+
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
+
+```{r, fig.height=30, fig.width=9}
+ # Summary of total.sulfur.dioxide variable
+summary(white_wine$total.sulfur.dioxide)
+``` 
+
+```{r}
+ # exploring the total.sulfur.dioxide distribution
+plot_box_histogram('total.sulfur.dioxide')
+``` 
+
+###Density
+
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
+
+```{r, fig.height=30, fig.width=9}
+ # Summary of density variable
+summary(white_wine$density)
+``` 
+
+```{r}
+ # exploring the density distribution
+plot_box_histogram('density')
+``` 
+
+###PH
+
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
+
+```{r, fig.height=30, fig.width=9}
+ # Summary of pH variable
+summary(white_wine$pH)
+``` 
+
+```{r}
+ # exploring the pH distribution
+plot_box_histogram('pH')
+``` 
+
+###Sulphates
+
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
+
+```{r, fig.height=30, fig.width=9}
+ # Summary of sulphates variable
+summary(white_wine$sulphates)
+``` 
+
+```{r}
+ # exploring the sulphates distribution
+plot_box_histogram('sulphates')
+``` 
+
+###Alcohol
+
+We can see in the following diagram that the quality has a normal distribution 
+and there are only three signifcant outliers.
+
+```{r, fig.height=30, fig.width=9}
+ # Summary of alcohol variable
+summary(white_wine$alcohol)
+``` 
+
+```{r}
+ # exploring the alcohol distribution
+plot_box_histogram('alcohol')
 ``` 
 
 # Univariate Analysis
@@ -264,7 +418,8 @@ ggplot(aes(x = density, y = residual.sugar),
 
                             override.aes = list(alpha = 1, size = 2))) + 
 
-  geom_jitter(alpha = 0.05, size = 2) 
+  geom_jitter(alpha = 0.05, size = 2) +
+  scale_y_log10()
 ```
 
 ```{r}
